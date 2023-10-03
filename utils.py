@@ -1,18 +1,39 @@
 import requests
 import json
 
+
+DEFAULT_PARAMS = {
+    "query": "",
+    "start": 0,
+    "count": 100,  # Max # of API results
+    "appid": 440,  # Hard-coded TF2 appid
+    "norender": 1,
+    "sort_dir": "asc"  # Forces the results to be ordered
+}
+
+
 def get_spec_killstreak_kits():
     """
     Function which returns dictionary of specialized killstreak kits
     """
-    # https://steamcommunity.com/market/search?q=&category_440_Collection%5B%5D=any&category_440_Type%5B%5D=tag_TF_KillStreakifierToolB&appid=440
-    pass
+    params = {
+        "query": "",
+        "start": 0,
+        "sort_dir": "asc",  # Forces the results to be ordered
+        "count": 100,  # Max # of API results
+        "appid": 440,  # Hard-coded TF2 appid
+        "category_440_Collection[]": "any",
+        "category_440_Type[]": "tag_TF_KillStreakifierToolB",
+        "category_440_Quality[]": "tag_Unique",
+        "norender": 1,
+    }
+    return grab_all(params)
+
 
 def get_prof_killstreak_kits():
     """
     Returns dictionary results of professional killstreak kits
     """
-    page = 0
     params = {
         "query": "",
         "start": 0,
@@ -24,7 +45,11 @@ def get_prof_killstreak_kits():
         "category_440_Quality[]": "tag_Unique",
         "norender": 1,
     }
+    return grab_all(params)
+
+def grab_all(params):
     allres = []
+    page = 0
 
     while True:
         data = make_call_with_options(parameters=params)
