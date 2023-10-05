@@ -1,7 +1,7 @@
 import requests
 import json
 
-from utils import get_prof_killstreak_kits, get_spec_killstreak_kits
+from utils import get_prof_killstreak_kits, get_spec_killstreak_kits, get_killstreak_fabs
 
 SKK = []
 PKK = []
@@ -17,15 +17,16 @@ KF = []
 
 # Grab Kits
 ## Grab Specialized Killstreak Kits
-SKK = get_spec_killstreak_kits()
-print(len(SKK))
+# SKK = get_spec_killstreak_kits()
+# print(len(SKK))
 ## Grab Professional Killstreak Kits
-PKK = get_prof_killstreak_kits()
-print(len(PKK))
+# PKK = get_prof_killstreak_kits()
+# print(len(PKK))
 
 # Grab Kit Fabs
 ## Grab Specialized Killstreak Fabricators
-## Grab Professional Killstreak Kits
+## Grab Professional Killstreak Fabricator
+get_killstreak_fabs()
 
 # Compare the values and generate a cool looking list highlighting the best ones
 

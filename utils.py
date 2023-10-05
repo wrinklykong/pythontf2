@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 
 
 DEFAULT_PARAMS = {
@@ -46,6 +47,29 @@ def get_prof_killstreak_kits():
         "norender": 1,
     }
     return grab_all(params)
+
+def get_killstreak_fabs():
+    """
+    Returns a tuple of dictionary results of killstreak kits
+    """
+    params = {
+        "query": "Killstreak Kit Fabricator",
+        "start": 0,
+        "sort_dir": "asc",  # Forces the results to be ordered
+        "count": 100,  # Max # of API results
+        "appid": 440,  # Hard-coded TF2 appid
+        "category_440_Collection[]": "any",
+        "category_440_Quality[]": "tag_Unique",
+        "norender": 1,
+    }
+    results = grab_all(params)
+    # DEBUG
+    # print(results[4]['name'])
+    # print(re.search(r"Professional Killstreak.*Fabricator Kit", results[0]['name']))
+    # TODO: Functional split of results into two lists
+    # SKF = [ result for result in results if re.search(result['name'], r"Professional Killstreak.*Fabricator Kit") ]
+    # print(len(SKF))
+
 
 def grab_all(params):
     allres = []
