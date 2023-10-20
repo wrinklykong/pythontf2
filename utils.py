@@ -63,13 +63,9 @@ def get_killstreak_fabs():
         "norender": 1,
     }
     results = grab_all(params)
-    # DEBUG
-    # print(results[4]['name'])
-    # print(re.search(r"Professional Killstreak.*Fabricator Kit", results[0]['name']))
-    # TODO: Functional split of results into two lists
-    # SKF = [ result for result in results if re.search(result['name'], r"Professional Killstreak.*Fabricator Kit") ]
-    # print(len(SKF))
-
+    PKF = [ result for result in results if re.search(r"^Professional Killstreak.*Kit Fabricator", result['name']) ]
+    SKF = [ result for result in results if re.search(r"^Specialized Killstreak.*Kit Fabricator", result['name']) ]
+    return (PKF, SKF)
 
 def grab_all(params):
     allres = []
@@ -96,11 +92,13 @@ def make_call(query="", page=0):
             "category_440_Quality[]": "tag_Unique",
             "norender": 1,
         })
+    r.raise_for_status()
     return r
 
 def make_call_with_options(parameters):
     # Parameter object function call
     r = requests.get("https://steamcommunity.com/market/search/render", params=parameters)
+    r.raise_for_status()
     return json.loads(r.text)
 
 def load_results_into_dict(dict, params):
@@ -113,3 +111,28 @@ def load_results_into_dict(dict, params):
             # Load in the data to the dictionaries
             dict.append("something idk")  # key, value
     pass
+
+def find_price_difference(fab_list, kit_list, kit_name):
+    """
+    :param list fab_list: List of kit fabricators
+    :param list kit_list: List of kits
+    :param String kit_name: Kit name
+    """
+    if 'Fabricator' in kit_name:
+        kit_name = kit_name[:-11]
+    print(kit_name)
+    kit = None
+    fab = None
+    for f in fab_list:
+        if kit_name in f['name']:
+            fab = f
+    for k in kit_list:
+        if kit_name in k['name']:
+            kit = k
+    print(kit)
+    print(fab)
+    if kit is None or fab is None:
+        raise Exception("Failed to find values")
+    # Sell price listed in cents, convert to dollar amount
+    diff = kit['sell_price'] - fab['sell_price'] / 100
+    print(diff)
