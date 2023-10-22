@@ -23,14 +23,26 @@ try:
     # Grab Kit Fabs
     ## Grab Specialized Killstreak Fabricators
     ## Grab Professional Killstreak Fabricator
-    SKF, PKF = get_killstreak_fabs()
+    PKF, SKF = get_killstreak_fabs()
 except requests.HTTPError as e:
     print(f"Failed to generate due to HTML error: {e}")
 # Compare the values and generate a cool looking list highlighting the best ones
 
-print(SKF[0]['name'])
-diff = find_price_difference(SKF, SKK, SKF[0]['name'])
-print(diff)
+## Read file of names
+f = open("weaponlist.txt", "r")
+weapon_list = []
+for i in range(160):
+    weapon_list.append(f.readline().strip())
+f.close()
+
+## Create file with current date and time
+# filename = time.strftime('%m-%d-%y_%H:%M:%S')
+# f = open(filename, "a")
+
+# Get values
+for weapon_name in weapon_list:
+    diff = find_price_difference(SKF, SKK, weapon_name)
+    print(f"{weapon_name}: {diff}")
 
 # Save results to a file for later reference (maybe create a cool history?)
 
